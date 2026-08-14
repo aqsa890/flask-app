@@ -4,7 +4,7 @@ pipeline{
             stage("Cloning/Pulling Stage"){
                 steps{
                     echo "Cloning code"
-                    git url: "https://github.com/aqsa890/flask-app.git" ,branch: "master" 
+                    git url: "https://github.com/aqsa890/flask-app.git" ,branch: "main" 
                 }
             }
             stage("Build"){
