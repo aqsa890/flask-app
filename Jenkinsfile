@@ -57,16 +57,36 @@ pipeline {
 
     post {
 
-        success {
-            script {
-                emailext(
-                    from: 'cutilicious1947@gmail.com',
-                    to: 'rkkhan0750@gmail.com',
-                    body: 'Build successful for Flask App CI/CD Pipeline',
-                    subject: 'Build Success - Flask App CI/CD'
-                )
-            }
+    success {
+        script {
+            emailext(
+                from: 'cutilicious1947@gmail.com',
+                to: 'rkkhan0750@gmail.com',
+                subject: "SUCCESS: Flask App CI/CD Pipeline - Build #${BUILD_NUMBER}",
+                body: """
+Hello,
+
+The Flask App CI/CD pipeline has completed successfully.
+
+Build Details:
+------------------------------
+Project     : Flask App
+Build       : #${BUILD_NUMBER}
+Status      : SUCCESS
+Branch      : ${env.GIT_BRANCH}
+Commit      : ${env.GIT_COMMIT}
+Job         : ${env.JOB_NAME}
+Build URL   : ${env.BUILD_URL}
+
+The application was successfully built and the pipeline completed without errors.
+
+Regards,
+Jenkins CI/CD Pipeline
+""".stripIndent()
+            )
         }
+    }
+}
 
         failure {
             script {
