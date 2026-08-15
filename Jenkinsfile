@@ -1,8 +1,5 @@
 pipeline {
-    agent { 
-        label "dev"
-    }
-
+    agent any;
     stages {
 
         stage("Cloning/Pulling Stage") {
