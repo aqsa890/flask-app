@@ -61,7 +61,7 @@ pipeline {
             script {
                 emailext(
                     from: 'mentor@trainwithshubham.com',
-                    to: 'your-email@gmail.com',
+                    to: 'rkkhan0750@gmail.com',
                     body: 'Build successful for Flask App CI/CD Pipeline',
                     subject: 'Build Success - Flask App CI/CD'
                 )
@@ -72,7 +72,7 @@ pipeline {
             script {
                 emailext(
                     from: 'mentor@trainwithshubham.com',
-                    to: 'your-email@gmail.com',
+                    to: 'rkkhan0750@gmail.com',
                     body: 'Build failed for Flask App CI/CD Pipeline. Please check the Jenkins console output.',
                     subject: 'Build Failure - Flask App CI/CD'
                 )
