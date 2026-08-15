@@ -1,5 +1,5 @@
 pipeline {
-    agent any;
+    agent { label "dev" };
     stages {
 
         stage("Cloning/Pulling Stage") {
@@ -60,7 +60,7 @@ pipeline {
         success {
             script {
                 emailext(
-                    from: 'mentor@trainwithshubham.com',
+                    from: 'cutilicious1947@gmail.com',
                     to: 'rkkhan0750@gmail.com',
                     body: 'Build successful for Flask App CI/CD Pipeline',
                     subject: 'Build Success - Flask App CI/CD'
@@ -71,7 +71,7 @@ pipeline {
         failure {
             script {
                 emailext(
-                    from: 'mentor@trainwithshubham.com',
+                    from: 'cutilicious1947@gmail.com',
                     to: 'rkkhan0750@gmail.com',
                     body: 'Build failed for Flask App CI/CD Pipeline. Please check the Jenkins console output.',
                     subject: 'Build Failure - Flask App CI/CD'
