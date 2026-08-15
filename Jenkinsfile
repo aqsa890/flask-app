@@ -1,44 +1,85 @@
-pipeline{
+pipeline {
     agent { 
-        label "dev" };
-        stages{
-            stage("Cloning/Pulling Stage"){
-                steps{
-                    echo "Cloning code"
-                    git url: "https://github.com/aqsa890/flask-app.git" ,branch: "main" 
-                }
+        label "dev"
+    }
+
+    stages {
+
+        stage("Cloning/Pulling Stage") {
+            steps {
+                echo "Cloning code"
+
+                git url: "https://github.com/aqsa890/flask-app.git",
+                    branch: "main"
             }
-            stage("Build"){
-                steps{
-                    echo "Building the 2 tier flask app from Dockerfile"
-                    sh "docker build -t myflask-app:v1.0.0 ."
-                }
+        }
+
+        stage("Build") {
+            steps {
+                echo "Building the 2 tier flask app from Dockerfile"
+
+                sh "docker build -t myflask-app:v1.0.0 ."
             }
-            stage("Test"){
-                steps{
-                    echo "Testing"
-                }
+        }
+
+        stage("Test") {
+            steps {
+                echo "Testing"
             }
-            stage("Push to Docker HUB"){
-                steps{
-                    echo "Pushing image"
-                    withCredentials([usernamePassword(
-                        credentialsId:"dockerHubCreds",
+        }
+
+        stage("Push to Docker HUB") {
+            steps {
+                echo "Pushing image"
+
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: "dockerHubCreds",
                         passwordVariable: "dockerHubPass",
                         usernameVariable: "dockerHubUser"
-                        )
-                        ]){
-                        sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
-                        sh "docker image tag myflask-app:v1.0.0 ${env.dockerHubUser}/myflask-app:v1.0.0"
-                        sh "docker push ${env.dockerHubUser}/myflask-app:v1.0.0"
-                        }
-                }
-            }
-            stage("Deploy"){
-                steps{
-                    echo "Deploying"
-                    sh "docker compose up -d --build flask-app"
+                    )
+                ]) {
+
+                    sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
+
+                    sh "docker image tag myflask-app:v1.0.0 ${env.dockerHubUser}/myflask-app:v1.0.0"
+
+                    sh "docker push ${env.dockerHubUser}/myflask-app:v1.0.0"
                 }
             }
         }
+
+        stage("Deploy") {
+            steps {
+                echo "Deploying"
+
+                sh "docker compose up -d --build flask-app"
+            }
+        }
+    }
+
+    post {
+
+        success {
+            script {
+                emailext(
+                    from: 'mentor@trainwithshubham.com',
+                    to: 'your-email@gmail.com',
+                    body: 'Build successful for Flask App CI/CD Pipeline',
+                    subject: 'Build Success - Flask App CI/CD'
+                )
+            }
+        }
+
+        failure {
+            script {
+                emailext(
+                    from: 'mentor@trainwithshubham.com',
+                    to: 'your-email@gmail.com',
+                    body: 'Build failed for Flask App CI/CD Pipeline. Please check the Jenkins console output.',
+                    subject: 'Build Failure - Flask App CI/CD'
+                )
+            }
+        }
+    }
 }
