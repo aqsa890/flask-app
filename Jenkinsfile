@@ -1,5 +1,6 @@
 pipeline {
-    agent { label "dev" };
+    agent { label "dev" }
+
     stages {
 
         stage("Cloning/Pulling Stage") {
@@ -57,13 +58,13 @@ pipeline {
 
     post {
 
-    success {
-        script {
-            emailext(
-                from: 'cutilicious1947@gmail.com',
-                to: 'rkkhan0750@gmail.com',
-                subject: "SUCCESS: Flask App CI/CD Pipeline - Build #${BUILD_NUMBER}",
-                body: """
+        success {
+            script {
+                emailext(
+                    from: 'cutilicious1947@gmail.com',
+                    to: 'rkkhan0750@gmail.com',
+                    subject: "SUCCESS: Flask App CI/CD Pipeline - Build #${BUILD_NUMBER}",
+                    body: """
 Hello,
 
 The Flask App CI/CD pipeline has completed successfully.
@@ -71,30 +72,30 @@ The Flask App CI/CD pipeline has completed successfully.
 Build Details:
 ------------------------------
 Project     : Flask App
-Build       : #${BUILD_NUMBER}
+Build No.   : #${BUILD_NUMBER}
 Status      : SUCCESS
 Branch      : ${env.GIT_BRANCH}
 Commit      : ${env.GIT_COMMIT}
 Job         : ${env.JOB_NAME}
 Build URL   : ${env.BUILD_URL}
 
-The application was successfully built and the pipeline completed without errors.
+The application was successfully built, tested, pushed to Docker Hub,
+and deployed successfully.
 
 Regards,
 Jenkins CI/CD Pipeline
 """.stripIndent()
-            )
+                )
+            }
         }
-    }
-}
 
         failure {
             script {
                 emailext(
-                    from: 'cutilicious1947@gmail.com', 
+                    from: 'cutilicious1947@gmail.com',
                     to: 'rkkhan0750@gmail.com',
-                    body: 'Build failed for Flask App CI/CD Pipeline. Please check the Jenkins console output.',
-                    subject: 'Build Failure - Flask App CI/CD'
+                    subject: 'Build Failure - Flask App CI/CD',
+                    body: 'Build failed for Flask App CI/CD Pipeline. Please check the Jenkins console output.'
                 )
             }
         }
